@@ -31,6 +31,7 @@ func WithdrawBalance(c *gin.Context) {
 
 	if input.Amount > user.Balance {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Insufficient funds"})
+		return
 	}
 
 	balance_withdrawn := input.Amount
