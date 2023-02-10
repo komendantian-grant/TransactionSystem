@@ -12,7 +12,7 @@ func ConnectDatabase() {
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		panic("Failed to connect to database!")
+		panic("Unable to connect to database.")
 	}
 
 	database.AutoMigrate(&User{})

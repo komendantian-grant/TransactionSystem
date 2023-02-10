@@ -15,7 +15,7 @@ type WithdrawBalanceInput struct {
 	Amount int `json:"amount" binding:"required"`
 }
 
-// curl -v -H 'Content-Type: application/json' -d '{"id":2, "amount":16}' -X POST 127.0.0.1:8080/change_balance
+// curl -v -H 'Content-Type: application/json' -d '{"id":2, "amount":16}' -X POST 127.0.0.1:8080/withdraw_balance
 func WithdrawBalance(c *gin.Context) {
 	var input WithdrawBalanceInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -25,7 +25,7 @@ func WithdrawBalance(c *gin.Context) {
 
 	var user models.User
 	if err := models.DB.Where("id = ?", input.Id).First(&user).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "user not found"})
 		return
 	}
 
