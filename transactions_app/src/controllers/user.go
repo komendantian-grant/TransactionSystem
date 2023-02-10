@@ -94,8 +94,9 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-    user := map[string]interface{}{"name":input.Name, "balance":input.Balance}
-	models.DB.Create(user)
+	user := models.User{Name: input.Name, Balance: input.Balance}
+	models.DB.Create(&user)
+
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
 
