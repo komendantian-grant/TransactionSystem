@@ -34,11 +34,16 @@ func WithdrawBalance(c *gin.Context) {
 		return
 	}
 
+	if input.Amount <= 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Unable to withdraw non-positive amount"})
+		return
+	}
+
 	balance_withdrawn := input.Amount
 	new_balance := user.Balance - balance_withdrawn
-	updatedUser := models.User{Balance: new_balance}
+	updatedUser := map[string]interface{}{"id":input.Id, "balance":new_balance}
 
-	models.DB.Model(&user).Updates(&updatedUser)
+	models.DB.Model(&user).Updates(updatedUser)
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 
@@ -89,15 +94,15 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	user := models.User{Name: input.Name, Balance: input.Balance}
-	models.DB.Create(&user)
+    user := map[string]interface{}{"name":input.Name, "balance":input.Balance}
+	models.DB.Create(user)
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
 
 type UpdateUserInput struct {
 	Id int `json:"id" binding:"required"`
 	Name string `json:"name"`
-	Balance int `json:"balance"`
+	Balance *int `json:"balance"`
 }
 
 
@@ -117,8 +122,8 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	updatedUser := models.User{Name: input.Name, Balance: input.Balance}
-	models.DB.Model(&user).Updates(&updatedUser)
+	updatedUser := map[string]interface{}{"name":input.Name, "balance":input.Balance}
+	models.DB.Model(&user).Updates(updatedUser)
 	c.JSON(http.StatusOK, gin.H{"data": user})
 
 }
