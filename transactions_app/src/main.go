@@ -49,6 +49,10 @@ func main() {
 
 	rabbitmq.GetChannel()
 
+    rabbitmq.SendMessages()
+    rabbitmq.SendMessages()
+    rabbitmq.SendMessages()
+
     go rabbitmq.ConsumeMessages()
 
 
