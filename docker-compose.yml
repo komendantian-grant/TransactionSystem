@@ -25,5 +25,17 @@ services:
       - custom
     container_name: transactions_app
 
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    build: ./rabbitmq_app
+    env_file: ./rabbitmq_app/rabbitmq.env
+    ports:
+      - 15673:15672
+      - 5673:5672
+      - 3001:3000
+    networks:
+      - custom
+    container_name: rabbitmq_app
+
 networks:
   custom:
