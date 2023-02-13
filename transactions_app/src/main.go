@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"time"
-	"fmt"
 	"log"
 )
 
@@ -34,23 +33,14 @@ func main() {
 	router.DELETE("/delete_user", controllers.DeleteUser)
 	router.POST("/withdraw_balance", controllers.WithdrawBalanceSend)
 
-	fmt.Println("TestTestTestTestTestTestTestTestTestTestTestTestTestTest!!!")
-
 	rabbitmq.GetChannel()
-
-    rabbitmq.SendMessages("hello")
-    rabbitmq.SendMessages("hi")
-    rabbitmq.SendMessages("privet")
-
     consume_channel := make(chan []byte)
     go func() {
         for {
-            //fmt.Println("Consumed is:", string(<-consume_channel))
             controllers.WithdrawBalanceReceive(<-consume_channel)
         }
     }()
     go rabbitmq.ConsumeMessages(consume_channel)
-
 
 	router.Run("0.0.0.0:8080")
 
