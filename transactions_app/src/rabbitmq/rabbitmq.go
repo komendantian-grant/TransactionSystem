@@ -25,7 +25,7 @@ func GetChannel(){
 	CH = ch
 }
 
-func ConsumeMessages() {
+func ConsumeMessages(consume_channel chan []byte) {
 	ch := CH
 
 	q, err := ch.QueueDeclare(
@@ -51,7 +51,7 @@ func ConsumeMessages() {
 
 	go func() {
 		for d := range msgs {
-			log.Printf("Received a message: %s", d.Body)
+		    consume_channel <- d.Body
 		}
 	}()
 

@@ -53,7 +53,13 @@ func main() {
     rabbitmq.SendMessages()
     rabbitmq.SendMessages()
 
-    go rabbitmq.ConsumeMessages()
+    consume_channel := make(chan []byte)
+    go func() {
+        for {
+            fmt.Println("Consumed is:", <-consume_channel)
+        }
+    }()
+    go rabbitmq.ConsumeMessages(consume_channel)
 
 
 	router.Run("0.0.0.0:8080")
