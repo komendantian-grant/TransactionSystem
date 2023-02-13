@@ -54,11 +54,9 @@ func ConsumeMessages(consume_channel chan []byte) {
 		    consume_channel <- d.Body
 		}
 	}()
-
-	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
 }
 
-func SendMessages(body string) {
+func SendMessage(body string) {
     ch := CH
 
 	q, err := ch.QueueDeclare(
@@ -73,7 +71,6 @@ func SendMessages(body string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	//body := "Hello World!"
 	err = ch.PublishWithContext(ctx,
 		"",     // exchange
 		q.Name, // routing key

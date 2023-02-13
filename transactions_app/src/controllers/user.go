@@ -26,10 +26,6 @@ func WithdrawBalance(c *gin.Context) {
 		return
 	}
 
-	input_json, _ := json.Marshal(input)
-	fmt.Println("input_json")
-	rabbitmq.SendMessages(string(input_json))
-
 	var user models.User
 	if err := models.DB.Where("id = ?", input.Id).First(&user).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "user not found"})
@@ -66,8 +62,7 @@ func WithdrawBalanceSend(c *gin.Context) {
 	}
 
 	input_json, _ := json.Marshal(input)
-	fmt.Println("input_json")
-	rabbitmq.SendMessages(string(input_json))
+	rabbitmq.SendMessage(string(input_json))
 
 	c.JSON(http.StatusOK, gin.H{"data": "success"})
 }
