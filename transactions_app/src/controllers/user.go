@@ -3,10 +3,13 @@ package controllers
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"fmt"
+	"encoding/json"
 )
 
 import (
 	"transactionSystem/models"
+	"transactionSystem/rabbitmq"
 )
 
 
@@ -22,6 +25,10 @@ func WithdrawBalance(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	input_json, _ := json.Marshal(input)
+	fmt.Println("input_json")
+	rabbitmq.SendMessages(string(input_json))
 
 	var user models.User
 	if err := models.DB.Where("id = ?", input.Id).First(&user).Error; err != nil {

@@ -49,14 +49,14 @@ func main() {
 
 	rabbitmq.GetChannel()
 
-    rabbitmq.SendMessages()
-    rabbitmq.SendMessages()
-    rabbitmq.SendMessages()
+    rabbitmq.SendMessages("hello")
+    rabbitmq.SendMessages("hi")
+    rabbitmq.SendMessages("privet")
 
     consume_channel := make(chan []byte)
     go func() {
         for {
-            fmt.Println("Consumed is:", <-consume_channel)
+            fmt.Println("Consumed is:", string(<-consume_channel))
         }
     }()
     go rabbitmq.ConsumeMessages(consume_channel)
