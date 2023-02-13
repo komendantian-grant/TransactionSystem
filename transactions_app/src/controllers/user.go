@@ -57,6 +57,29 @@ func WithdrawBalance(c *gin.Context) {
 }
 
 
+// curl -v -H 'Content-Type: application/json' -d '{"id":2, "amount":16}' -X POST 127.0.0.1:8080/withdraw_balance
+func WithdrawBalanceSend(c *gin.Context) {
+	var input WithdrawBalanceInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	input_json, _ := json.Marshal(input)
+	fmt.Println("input_json")
+	rabbitmq.SendMessages(string(input_json))
+
+	c.JSON(http.StatusOK, gin.H{"data": "success"})
+}
+
+func WithdrawBalanceReceive(withdraw_balance_json []byte) {
+    fmt.Println("Withdrawing balance:", string(withdraw_balance_json))
+    var input WithdrawBalanceInput
+    json.Unmarshal(withdraw_balance_json, &input)
+    fmt.Println("Structure:", input.Id, input.Amount)
+}
+
+
 // curl -v -H 'Content-Type: application/json' -d '{}' -X GET 127.0.0.1:8080/get_users
 func GetUsers(c *gin.Context) {
 	var users []models.User
