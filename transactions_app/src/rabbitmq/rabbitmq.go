@@ -29,7 +29,7 @@ func ConsumeMessages(consume_channel chan []byte) {
 	ch := CH
 
 	q, err := ch.QueueDeclare(
-		"hello", // name
+		"withdraw_balance", // name
 		true,   // durable
 		false,   // delete when unused
 		false,   // exclusive
@@ -62,7 +62,7 @@ func SendMessages(body string) {
     ch := CH
 
 	q, err := ch.QueueDeclare(
-		"hello", // name
+		"withdraw_balance", // name
 		true,   // durable
 		false,   // delete when unused
 		false,   // exclusive
