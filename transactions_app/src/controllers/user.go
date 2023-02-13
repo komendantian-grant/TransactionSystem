@@ -77,6 +77,29 @@ func WithdrawBalanceReceive(withdraw_balance_json []byte) {
     var input WithdrawBalanceInput
     json.Unmarshal(withdraw_balance_json, &input)
     fmt.Println("Structure:", input.Id, input.Amount)
+
+    var user models.User
+	if err := models.DB.Where("id = ?", input.Id).First(&user).Error; err != nil {
+		//c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "user not found"})
+		return
+	}
+
+	if input.Amount > user.Balance {
+		//c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Insufficient funds"})
+		return
+	}
+
+	if input.Amount <= 0 {
+		//c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Unable to withdraw non-positive amount"})
+		return
+	}
+
+	balance_withdrawn := input.Amount
+	new_balance := user.Balance - balance_withdrawn
+	updatedUser := map[string]interface{}{"id":input.Id, "balance":new_balance}
+
+	models.DB.Model(&user).Updates(updatedUser)
+
 }
 
 

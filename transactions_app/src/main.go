@@ -32,7 +32,7 @@ func main() {
 	router.POST("/create_user", controllers.CreateUser)
 	router.PATCH("/update_user", controllers.UpdateUser)
 	router.DELETE("/delete_user", controllers.DeleteUser)
-	router.POST("/withdraw_balance", controllers.WithdrawBalance)
+	router.POST("/withdraw_balance", controllers.WithdrawBalanceSend)
 
 	fmt.Println("TestTestTestTestTestTestTestTestTestTestTestTestTestTest!!!")
 
