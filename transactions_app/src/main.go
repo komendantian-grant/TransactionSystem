@@ -34,18 +34,7 @@ func main() {
 	router.DELETE("/delete_user", controllers.DeleteUser)
 	router.POST("/withdraw_balance", controllers.WithdrawBalance)
 
-	ticker := time.NewTicker(time.Second*5)
-
 	fmt.Println("TestTestTestTestTestTestTestTestTestTestTestTestTestTest!!!")
-
-	go func() {
-	    for {
-	        select {
-	        case t:= <- ticker.C:
-	            fmt.Println("Ticker ticked!", t)
-	        }
-	    }
-	}()
 
 	rabbitmq.GetChannel()
 
